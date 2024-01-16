@@ -14,6 +14,13 @@ public class Guest : MonoBehaviour
     public static event OrderFulfilledEventHandler OnOrderFulfilled;
 
 
+    
+    public delegate void OrderGeneratedEventHandler(Order order);
+
+    // Define the event using the delegate
+    public static event OrderGeneratedEventHandler OnOrderGenerated;
+
+
 
      void Update()
     {
@@ -28,11 +35,11 @@ public class Guest : MonoBehaviour
 
         List<Ingredient> myObjects = new List<Ingredient>
         {
-            new Ingredient("Tomato"),
-            new Ingredient("Cheese"),
-            new Ingredient("Banana"),
-            new Ingredient("Corn"),
-            new Ingredient("Mushroom")
+            new Ingredient("tomato"),
+            new Ingredient("cheese"),
+            new Ingredient("banana"),
+            // new Ingredient("Corn"),
+            new Ingredient("mushroom")
         };
 
         System.Random random = new System.Random();
@@ -49,5 +56,7 @@ public class Guest : MonoBehaviour
             Debug.Log(ing.name);
         }
 
+
+        OnOrderGenerated?.Invoke(order);
     }
 }

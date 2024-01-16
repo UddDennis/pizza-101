@@ -12,15 +12,18 @@ public class NPCMovement : MonoBehaviour
     private Guest guest;
 
     // private float targetRotation = 90f;
+    private AudioSource audioSource;
     // private float currentRotation = 90f;
 
     void Start()
     {
         // Define initial direction or starting point if necessary
         moveDirection = Vector3.forward;
-        Guest.OnOrderFulfilled += HandleOrderFulfilled;
+        // Guest.OnOrderFulfilled += HandleOrderFulfilled;
         guest = GetComponent<Guest>();
+        ChecklistManager.OnPizzaDone += HandleOrderFulfilled;
 
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -42,17 +45,19 @@ public class NPCMovement : MonoBehaviour
         }
     }
 
+
+
     void Move()
     {
         // Implement your movement logic here
         transform.Translate(moveDirection * speed * Time.deltaTime);
     }
 
-    void HandleOrderFulfilled(Order order)
+    void HandleOrderFulfilled()
     {
         orderFilled = true;
         // Perform actions when an order is fulfilled
-        Debug.Log("Order Fulfilled: " + order.ingredients);
+        Debug.Log("Order Fulfilled: " );
     }
     void Rotate()
     {
@@ -74,6 +79,22 @@ public class NPCMovement : MonoBehaviour
             collided = true;
             // Perform actions with the enteringObject
             guest.generateOrder();
+            PlaySound();
+        }
+        if (other.CompareTag("Finish"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+
+    public void PlaySound()
+    {
+        // Check if the AudioSource and AudioClip are not null
+        if (audioSource != null)
+        {
+            // Play the sound
+            audioSource.Play();
         }
     }
 
